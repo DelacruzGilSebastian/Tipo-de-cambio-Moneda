@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tipo de Cambio — Latinoamérica</title>
+<title>Envios Cutuyi — Latinoamérica</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
 <style>
@@ -242,18 +242,18 @@
 
   <header>
     <div class="badge"><span class="dot"></span> En vivo</div>
-    <h1>Tipo de Cambio<br><span>Latinoamérica</span></h1>
-    <p>Convierte entre dólares y monedas latinoamericanas en tiempo real</p>
+    <h1>Agencia de <br><span>Envios Latam</span></h1>
+    <p>Calcula el costo de recepción de tus paquetes en toda Latinoamérica</p>
   </header>
 
   <div class="loading-bar"><div class="loading-fill" id="lbar"></div></div>
 
   <!-- Conversor -->
   <div class="converter-card">
-    <p class="converter-title">Conversor de moneda</p>
+    <p class="converter-title">Calculadora de Envíos</p>
     <div class="converter-row">
       <div class="field">
-        <label>Monto</label>
+        <label>Monto a enviar/ Valor del paquete</label>
         <input type="number" id="amount" value="100" min="0" step="any" oninput="convert()">
       </div>
       <div class="field">
@@ -268,7 +268,7 @@
     </div>
     <div class="result-panel">
       <div class="result-left">
-        <div class="label">Resultado</div>
+        <div class="label">El destinatario recibe</div>
         <div class="amount" id="result-amount">— <span id="result-code"></span></div>
         <div class="currency-name" id="result-name"></div>
       </div>
@@ -299,8 +299,13 @@
   <div class="cards-grid" id="cards"></div>
 
   <footer>
-    <p id="last-update">Cargando...</p>
-    <p style="margin-top:6px;">Fuente: <a href="https://www.frankfurter.app/" target="_blank">Frankfurter API</a> · Banco Central Europeo</p>
+    
+  <p id="last-update">Cargando...</p>
+  <p style="margin-top:6px;">Fuente: <a href="https://www.exchangerate-api.com/" target="_blank">ExchangeRate-API</a> · Datos de mercado</p>
+  <p style="margin-top:12px; color: var(--purple-light); font-weight: 500; letter-spacing: 0.05em;">
+    Desarrollado por <span style="color: var(--purple-mid); font-weight: 600;">S. De la Cruz</span>
+  </p>
+
   </footer>
 
 </div>
@@ -427,13 +432,14 @@ function selectTo(code) {
 
 async function loadRates() {
   const bar = document.getElementById('lbar');
+  const apikey= '52995962002dd7f65ea77148';
   bar.style.width = '25%';
   try {
     const codes = [...new Set(uniqueCountries.filter(c=>c.code!=='USD').map(c=>c.code))].join(',');
-    const res = await fetch(`https://api.frankfurter.app/latest?from=USD&to=${codes}`);
+    const res = await fetch(`https://v6.exchangerate-api.com/v6/${apikey}/latest/USD`);
     const json = await res.json();
     bar.style.width = '80%';
-    rates = {...json.rates, USD:1};
+    rates = json.conversion_rates;
     bar.style.width = '100%';
     setTimeout(()=>{ bar.style.width='0%'; },500);
     const t = new Date();
@@ -443,14 +449,36 @@ async function loadRates() {
     convert();
     updateMetrics();
   } catch(e) {
+    
     bar.style.width = '0%';
-    rates = {USD:1,MXN:17.15,BRL:5.72,ARS:1060,COP:4320,CLP:945,PEN:3.71,VES:46.2,BOB:6.91,PYG:7950,UYU:41.8,CRC:518,GTQ:7.74,HNL:25.1,NIO:36.7,DOP:59.5,CUP:24,HTG:132};
+    
+    rates = {
+      USD: 1,
+      PEN: 3.49,   // Valor que viste en Google
+      MXN: 16.72,  // Peso mexicano actualizado
+      BRL: 5.12,   // Real brasileño actualizado
+      ARS: 872,    // Peso argentino (oficial/mercado)
+      COP: 3915,   // Peso colombiano actualizado
+      CLP: 938,    // Peso chileno actualizado
+      VES: 36.4,   // Bolívar actualizado
+      BOB: 6.91,   // Boliviano
+      PYG: 7420,   // Guaraní actualizado
+      UYU: 38.6,   // Peso uruguayo actualizado
+      CRC: 502,    // Colón costarricense
+      GTQ: 7.75,   // Quetzal
+      HNL: 24.7,   // Lempira
+      NIO: 36.6,   // Córdoba
+      DOP: 59.2,   // Peso dominicano
+      CUP: 24,     // Peso cubano
+      HTG: 132
+    };
     document.getElementById('last-update').textContent = 'Sin conexión · Usando datos de referencia';
     buildSelects();
     convert();
     updateMetrics();
   }
-}
+ }
+
 
 loadRates();
 setInterval(loadRates, 60000);
