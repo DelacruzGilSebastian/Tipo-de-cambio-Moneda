@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tipo de Cambio — Latinoamérica</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flag-icons@7.2.3/css/flag-icons.min.css">
+<style>
+  :root {
+    --bg-base:      #0d0d14;
+    --bg-surface:   #13131f;
+    --bg-card:      #1a1a2e;
+    --bg-card-alt:  #1f1f35;
+    --purple-light: #c4b5fd;
+    --purple-mid:   #a78bfa;
+    --purple:       #7c3aed;
+    --purple-deep:  #4c1d95;
+    --purple-glow:  rgba(124,58,237,0.25);
+    --purple-glow2: rgba(167,139,250,0.08);
+    --text-primary: #f1f0ff;
+    --text-secondary:#a09cba;
+    --text-muted:   #5e5a7a;
+    --border:       rgba(124,58,237,0.18);
+    --border-light: rgba(167,139,250,0.1);
+    --success:      #34d399;
+    --danger:       #f87171;
+    --radius-sm:    8px;
+    --radius-md:    12px;
+    --radius-lg:    18px;
+    --radius-xl:    24px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background mesh */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -30%;
+    left: -20%;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -20%;
+    right: -15%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(76,29,149,0.15) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Header ── */
+  header { text-align: center; padding: 3rem 0 2.5rem; }
+  header .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(124,58,237,0.15); border: 1px solid var(--border);
+    color: var(--purple-light); font-size: 12px; font-weight: 500;
+    padding: 5px 14px; border-radius: 99px; margin-bottom: 1.2rem;
+    letter-spacing: 0.04em; text-transform: uppercase;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); animation: blink 1.6s infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  header h1 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 700; line-height: 1.15; margin-bottom: 0.6rem; }
+  header h1 span { color: var(--purple-mid); }
+  header p { font-size: 15px; color: var(--text-secondary); font-weight: 300; }
+
+  /* ── Converter card ── */
+  .converter-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 60px rgba(124,58,237,0.08);
+  }
+  .converter-title { font-size: 13px; font-weight: 600; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1.25rem; }
+
+  .converter-row { display: flex; gap: 12px; align-items: flex-end; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 160px; }
+  .field label { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .field input, .field select {
+    height: 52px;
+    padding: 0 16px;
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: 'Poppins', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .field input:focus, .field select:focus {
+    border-color: var(--purple);
+    box-shadow: 0 0 0 3px var(--purple-glow);
+  }
+  .field select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237c3aed' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  .swap-btn {
+    width: 52px; height: 52px; border-radius: var(--radius-md);
+    background: rgba(124,58,237,0.15); border: 1px solid var(--border);
+    color: var(--purple-mid); font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: background 0.2s, transform 0.15s;
+    align-self: flex-end;
+  }
+  .swap-btn:hover { background: rgba(124,58,237,0.28); transform: rotate(180deg); }
+
+  .result-panel {
+    background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(76,29,149,0.08));
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem 1.75rem;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .result-left .label { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 4px; }
+  .result-left .amount { font-size: 2.2rem; font-weight: 700; color: var(--text-primary); line-height: 1; }
+  .result-left .amount span { font-size: 1.1rem; color: var(--purple-light); margin-left: 6px; }
+  .result-left .currency-name { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+  .result-right { text-align: right; }
+  .result-right .rate-tag {
+    display: inline-block; background: rgba(124,58,237,0.18);
+    border: 1px solid var(--border); border-radius: 99px;
+    font-size: 12px; color: var(--purple-light); padding: 4px 12px; font-weight: 500;
+  }
+
+  /* ── Divider ── */
+  .section-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 1rem; }
+  .section-title { font-size: 13px; font-weight: 600; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* ── Filters ── */
+  .filters { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 1.25rem; }
+  .filters input, .filters select {
+    height: 40px; padding: 0 14px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-md); color: var(--text-primary);
+    font-family: 'Poppins', sans-serif; font-size: 13px; outline: none;
+    transition: border-color 0.2s;
+  }
+  .filters input { flex: 1; min-width: 160px; }
+  .filters input:focus, .filters select:focus { border-color: var(--purple); }
+  .filters select { appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 32px; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237c3aed' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position: right 10px center; }
+
+  .refresh-btn {
+    height: 40px; padding: 0 16px; background: transparent;
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    color: var(--text-secondary); font-family: 'Poppins', sans-serif;
+    font-size: 13px; cursor: pointer; transition: all 0.2s; white-space: nowrap;
+  }
+  .refresh-btn:hover { background: rgba(124,58,237,0.12); color: var(--purple-light); border-color: var(--purple); }
+
+  /* ── Cards grid ── */
+  .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.18s, background 0.18s, transform 0.12s;
+    position: relative; overflow: hidden;
+  }
+  .card::before { content:''; position:absolute; inset:0; background: var(--purple-glow2); opacity:0; transition:opacity 0.2s; }
+  .card:hover { border-color: rgba(124,58,237,0.4); transform: translateY(-2px); }
+  .card:hover::before { opacity:1; }
+  .card.selected { border-color: var(--purple-mid); background: var(--bg-card-alt); }
+  .card.selected::after { content:'✓'; position:absolute; top:10px; right:12px; font-size:12px; color:var(--purple-light); font-weight:600; }
+
+  .card-top { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .flag { width:28px; height:20px; border-radius:3px; flex-shrink:0; display:inline-block; overflow:hidden; }
+  .fi { font-size:20px; }
+  .select-flag { display:inline-block; width:20px; height:14px; border-radius:2px; vertical-align:middle; margin-right:4px; position:relative; top:-1px; }
+  .cname { font-size:12px; font-weight:600; color:var(--text-primary); line-height:1.2; }
+  .cfull { font-size:10px; color:var(--text-muted); margin-top:1px; }
+  .crate { font-size:19px; font-weight:700; color:var(--text-primary); line-height:1; }
+  .crate small { font-size:11px; color:var(--text-muted); font-weight:400; margin-left:3px; }
+  .crate-label { font-size:10px; color:var(--text-muted); margin-top:2px; margin-bottom:6px; }
+  .converted-val { font-size:13px; font-weight:600; color:var(--purple-light); }
+  .converted-from { font-size:10px; color:var(--text-muted); margin-top:1px; }
+
+  /* ── Summary metrics ── */
+  .metrics { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-bottom:2rem; }
+  .metric { background:var(--bg-card); border:1px solid var(--border-light); border-radius:var(--radius-md); padding:14px 16px; }
+  .metric-label { font-size:11px; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:6px; }
+  .metric-value { font-size:22px; font-weight:700; color:var(--text-primary); }
+  .metric-sub { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+
+  /* ── Loading bar ── */
+  .loading-bar { height:2px; background:rgba(124,58,237,0.15); border-radius:99px; margin-bottom:1.5rem; overflow:hidden; }
+  .loading-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--purple),var(--purple-mid)); border-radius:99px; transition:width 0.4s; }
+
+  /* ── Footer ── */
+  footer { text-align:center; padding-top:2rem; font-size:12px; color:var(--text-muted); }
+  footer a { color:var(--purple-light); text-decoration:none; }
+  footer a:hover { text-decoration:underline; }
+
+  /* ── Scrollbar ── */
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg-base); }
+  ::-webkit-scrollbar-thumb { background:var(--purple-deep); border-radius:99px; }
+
+  /* ── Animations ── */
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:none} }
+  .converter-card { animation: fadeUp 0.5s ease both; }
+  .metrics { animation: fadeUp 0.5s 0.1s ease both; }
+  .cards-grid { animation: fadeUp 0.5s 0.2s ease both; }
+
+  @media (max-width: 600px) {
+    .converter-row { flex-direction:column; }
+    .swap-btn { width:100%; height:44px; }
+    header h1 { font-size: 1.7rem; }
+    .result-left .amount { font-size:1.8rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header>
+    <div class="badge"><span class="dot"></span> En vivo</div>
+    <h1>Tipo de Cambio<br><span>Latinoamérica</span></h1>
+    <p>Convierte entre dólares y monedas latinoamericanas en tiempo real</p>
+  </header>
+
+  <div class="loading-bar"><div class="loading-fill" id="lbar"></div></div>
+
+  <!-- Conversor -->
+  <div class="converter-card">
+    <p class="converter-title">Conversor de moneda</p>
+    <div class="converter-row">
+      <div class="field">
+        <label>Monto</label>
+        <input type="number" id="amount" value="100" min="0" step="any" oninput="convert()">
+      </div>
+      <div class="field">
+        <label>De</label>
+        <select id="from" onchange="convert()"></select>
+      </div>
+      <button class="swap-btn" onclick="swapCurrencies()" title="Intercambiar">⇌</button>
+      <div class="field">
+        <label>A</label>
+        <select id="to" onchange="convert()"></select>
+      </div>
+    </div>
+    <div class="result-panel">
+      <div class="result-left">
+        <div class="label">Resultado</div>
+        <div class="amount" id="result-amount">— <span id="result-code"></span></div>
+        <div class="currency-name" id="result-name"></div>
+      </div>
+      <div class="result-right">
+        <div class="rate-tag" id="rate-note">Cargando tasa...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Métricas -->
+  <div class="metrics" id="metrics"></div>
+
+  <!-- Tarjetas -->
+  <div class="section-header">
+    <span class="section-title">Equivalencias por país</span>
+    <button class="refresh-btn" onclick="loadRates()">↻ Actualizar tasas</button>
+  </div>
+
+  <div class="filters">
+    <input type="text" id="search" placeholder="Buscar país o moneda..." oninput="renderCards()">
+    <select id="sort" onchange="renderCards()">
+      <option value="name">Ordenar: A–Z</option>
+      <option value="rate_asc">Tasa menor primero</option>
+      <option value="rate_desc">Tasa mayor primero</option>
+    </select>
+  </div>
+
+  <div class="cards-grid" id="cards"></div>
+
+  <footer>
+    <p id="last-update">Cargando...</p>
+    <p style="margin-top:6px;">Fuente: <a href="https://www.frankfurter.app/" target="_blank">Frankfurter API</a> · Banco Central Europeo</p>
+  </footer>
+
+</div>
+
+<script>
+const countries = [
+  {flag:"us",name:"Estados Unidos",code:"USD",full:"Dólar americano"},
+  {flag:"mx",name:"México",code:"MXN",full:"Peso mexicano"},
+  {flag:"br",name:"Brasil",code:"BRL",full:"Real brasileño"},
+  {flag:"ar",name:"Argentina",code:"ARS",full:"Peso argentino"},
+  {flag:"co",name:"Colombia",code:"COP",full:"Peso colombiano"},
+  {flag:"cl",name:"Chile",code:"CLP",full:"Peso chileno"},
+  {flag:"pe",name:"Perú",code:"PEN",full:"Sol peruano"},
+  {flag:"ve",name:"Venezuela",code:"VES",full:"Bolívar soberano"},
+  {flag:"bo",name:"Bolivia",code:"BOB",full:"Boliviano"},
+  {flag:"py",name:"Paraguay",code:"PYG",full:"Guaraní"},
+  {flag:"uy",name:"Uruguay",code:"UYU",full:"Peso uruguayo"},
+  {flag:"cr",name:"Costa Rica",code:"CRC",full:"Colón costarricense"},
+  {flag:"gt",name:"Guatemala",code:"GTQ",full:"Quetzal"},
+  {flag:"hn",name:"Honduras",code:"HNL",full:"Lempira"},
+  {flag:"ni",name:"Nicaragua",code:"NIO",full:"Córdoba nicaragüense"},
+  {flag:"do",name:"Rep. Dominicana",code:"DOP",full:"Peso dominicano"},
+  {flag:"cu",name:"Cuba",code:"CUP",full:"Peso cubano"},
+  {flag:"ht",name:"Haití",code:"HTG",full:"Gourde haitiano"},
+  {flag:"ec",name:"Ecuador",code:"USD",full:"Dólar (usa USD)"},
+  {flag:"pa",name:"Panamá",code:"USD",full:"Balboa / USD"},
+  {flag:"sv",name:"El Salvador",code:"USD",full:"Dólar (usa USD)"},
+];
+
+const uniqueCountries = countries.filter((c,i,a) => a.findIndex(x=>x.code===c.code)===i);
+let rates = {};
+
+function fmt(val, code) {
+  if(val === null || isNaN(val)) return '—';
+  if(['PYG','COP','CLP','CUP','ARS'].includes(code)) return val.toLocaleString('es',{maximumFractionDigits:0});
+  return val.toLocaleString('es',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function getRate(from, to) {
+  if(!rates[from]||!rates[to]) return null;
+  return rates[to]/rates[from];
+}
+
+function convert() {
+  const amt = parseFloat(document.getElementById('amount').value);
+  const from = document.getElementById('from').value;
+  const to = document.getElementById('to').value;
+  const toInfo = uniqueCountries.find(c=>c.code===to);
+  if(isNaN(amt)||amt<0) { document.getElementById('result-amount').innerHTML='—'; return; }
+  const rate = getRate(from, to);
+  if(!rate) return;
+  const result = amt * rate;
+  document.getElementById('result-amount').innerHTML = fmt(result, to) + ' <span id="result-code">' + to + '</span>';
+  document.getElementById('result-name').textContent = toInfo ? toInfo.full : '';
+  document.getElementById('rate-note').textContent = '1 ' + from + ' = ' + fmt(rate, to) + ' ' + to;
+  renderCards();
+}
+
+function swapCurrencies() {
+  const f = document.getElementById('from');
+  const t = document.getElementById('to');
+  const tmp = f.value; f.value = t.value; t.value = tmp;
+  convert();
+}
+
+function buildSelects() {
+  ['from','to'].forEach((id, i) => {
+    const sel = document.getElementById(id);
+    sel.innerHTML = uniqueCountries.map(c =>
+      `<option value="${c.code}" ${(i===0&&c.code==='USD')||(i===1&&c.code==='PEN')?'selected':''}>${c.name} (${c.code})</option>`
+    ).join('');
+  });
+}
+
+function updateMetrics() {
+  const list = uniqueCountries.filter(c=>c.code!=='USD'&&rates[c.code]);
+  const rateVals = list.map(c=>rates[c.code]);
+  const lowest = list.reduce((a,b)=>rates[a.code]<rates[b.code]?a:b,list[0]);
+  const highest = list.reduce((a,b)=>rates[a.code]>rates[b.code]?a:b,list[0]);
+  document.getElementById('metrics').innerHTML = `
+    <div class="metric"><div class="metric-label">Países</div><div class="metric-value">${countries.length}</div><div class="metric-sub">en Latinoamérica</div></div>
+    <div class="metric"><div class="metric-label">Monedas propias</div><div class="metric-value">${list.length}</div><div class="metric-sub">distintas al USD</div></div>
+    <div class="metric"><div class="metric-label">Tasa más baja</div><div class="metric-value">${fmt(rates[lowest.code],lowest.code)}</div><div class="metric-sub"><span class="fi fi-${lowest.flag}" style="width:16px;height:12px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:4px;"></span>${lowest.name}</div></div>
+    <div class="metric"><div class="metric-label">Tasa más alta</div><div class="metric-value">${fmt(rates[highest.code],highest.code)}</div><div class="metric-sub"><span class="fi fi-${highest.flag}" style="width:16px;height:12px;border-radius:2px;display:inline-block;vertical-align:middle;margin-right:4px;"></span>${highest.name}</div></div>
+  `;
+}
+
+function renderCards() {
+  const amt = parseFloat(document.getElementById('amount').value)||100;
+  const from = document.getElementById('from').value;
+  const q = document.getElementById('search').value.toLowerCase();
+  const sort = document.getElementById('sort').value;
+  const toSel = document.getElementById('to').value;
+
+  let list = countries
+    .filter((c,i,a) => a.findIndex(x=>x.code===c.code)===i)
+    .filter(c => c.code !== from && rates[c.code])
+    .filter(c => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q) || c.full.toLowerCase().includes(q));
+
+  if(sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='rate_asc') list.sort((a,b)=>getRate('USD',a.code)-getRate('USD',b.code));
+  else if(sort==='rate_desc') list.sort((a,b)=>getRate('USD',b.code)-getRate('USD',a.code));
+
+  document.getElementById('cards').innerHTML = list.map(c => {
+    const rateUSD = getRate('USD', c.code);
+    const converted = getRate(from, c.code) ? amt * getRate(from, c.code) : null;
+    const sel = c.code === toSel;
+    return `<div class="card${sel?' selected':''}" onclick="selectTo('${c.code}')">
+      <div class="card-top">
+        <span class="fi fi-${c.flag} flag"></span>
+        <div><div class="cname">${c.name}</div><div class="cfull">${c.full}</div></div>
+      </div>
+      <div class="crate">${fmt(rateUSD,c.code)}<small>${c.code}/USD</small></div>
+      <div class="crate-label">tipo de cambio</div>
+      ${converted!==null?`<div class="converted-val">${fmt(converted,c.code)} ${c.code}</div><div class="converted-from">${fmt(amt,from)} ${from} →</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+function selectTo(code) {
+  document.getElementById('to').value = code;
+  convert();
+}
+
+async function loadRates() {
+  const bar = document.getElementById('lbar');
+  bar.style.width = '25%';
+  try {
+    const codes = [...new Set(uniqueCountries.filter(c=>c.code!=='USD').map(c=>c.code))].join(',');
+    const res = await fetch(`https://api.frankfurter.app/latest?from=USD&to=${codes}`);
+    const json = await res.json();
+    bar.style.width = '80%';
+    rates = {...json.rates, USD:1};
+    bar.style.width = '100%';
+    setTimeout(()=>{ bar.style.width='0%'; },500);
+    const t = new Date();
+    document.getElementById('last-update').textContent =
+      'Última actualización: ' + t.toLocaleDateString('es-PE') + ' · ' + t.toLocaleTimeString('es-PE',{hour:'2-digit',minute:'2-digit'});
+    buildSelects();
+    convert();
+    updateMetrics();
+  } catch(e) {
+    bar.style.width = '0%';
+    rates = {USD:1,MXN:17.15,BRL:5.72,ARS:1060,COP:4320,CLP:945,PEN:3.71,VES:46.2,BOB:6.91,PYG:7950,UYU:41.8,CRC:518,GTQ:7.74,HNL:25.1,NIO:36.7,DOP:59.5,CUP:24,HTG:132};
+    document.getElementById('last-update').textContent = 'Sin conexión · Usando datos de referencia';
+    buildSelects();
+    convert();
+    updateMetrics();
+  }
+}
+
+loadRates();
+setInterval(loadRates, 60000);
+</script>
+</body>
+</html>
